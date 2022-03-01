@@ -1,6 +1,18 @@
 
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 368.9005170335713 327.5" width="368.9005170335713" height="327.5">
 
+  <defs>
+    <style>
+      @font-face {
+        font-family: "Virgil";
+        src: url("https://excalidraw.com/Virgil.woff2");
+      }
+      @font-face {
+        font-family: "Cascadia";
+        src: url("https://excalidraw.com/Cascadia.woff2");
+      }
+    </style>
+  </defs>
   <!-- svg-source:excalidraw -->
 
   <rect x="0" y="0" width="368.9005170335713" height="327.5" fill="#ffffff">
