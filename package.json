@@ -6,7 +6,7 @@
 		"build": "parcel build index.html",
 		"test": "jest --watch",
 		"build:compasses": "node src/compasses/build-compasses.js > src/compasses/all-compasses.json",
-		"build:compasses:png": "svgexport src/compasses/compasses.svg src/compasses/compasses.png pad 736 11445"
+		"build:compasses:png": "svgexport assets/compasses.svg assets/compasses.png pad 736 11445"
 	},
 	"dependencies": {
 		"@babel/core": "^7.12.16",
