@@ -1,4 +1,4 @@
-export default () => {
+const buildCompasses = () => {
 	const letters = {
 		vowels: ['A', 'E', 'I', 'O', 'U'],
 		rares: ['J', 'Q', 'Z', 'K', 'W', 'Y', 'X', 'V'],
@@ -159,3 +159,5 @@ export default () => {
 
 	return allCompasses
 }
+
+console.log(JSON.stringify(buildCompasses()))
