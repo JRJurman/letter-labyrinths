@@ -10,17 +10,19 @@ const svg = registerSvg({
 const cardWidth = 368
 const cardHeight = 327
 
+const cardsWide = 7
+const cardsHigh = 10
+
 export default () => {
 	const compassCards = []
 	let x = 0
-	let y = 0
+	let y = -1
 	compasses.forEach((compassData, index) => {
-		if (!(index % 2)) {
-			x++
-		}
-		if (index % 2) {
+		if (index % cardsWide === 0) {
 			y++
-			x--
+			x = 0
+		} else {
+			x++
 		}
 		compassCards.push(
 			svg`<CompassCard compassData=${compassData}
@@ -30,8 +32,8 @@ export default () => {
 
 	// there are 69 compasses
 
-	const height = cardHeight * 35
-	const width = cardWidth * 2
+	const height = cardHeight * cardsHigh
+	const width = cardWidth * cardsWide
 
 	return svg`
 		<svg class="render-cards" width="${width}px" height="${height}px">${compassCards}</svg>
