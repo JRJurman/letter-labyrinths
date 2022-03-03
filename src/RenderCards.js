@@ -7,8 +7,8 @@ const svg = registerSvg({
 	CompassCard: CompassCard,
 })
 
-const cardWidth = 368
-const cardHeight = 327
+const cardWidth = 350
+const cardHeight = 342
 
 const cardsWide = 10
 const cardsHigh = 7
