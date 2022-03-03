@@ -10,8 +10,8 @@ const svg = registerSvg({
 const cardWidth = 368
 const cardHeight = 327
 
-const cardsWide = 7
-const cardsHigh = 10
+const cardsWide = 10
+const cardsHigh = 7
 
 export default () => {
 	const compassCards = []
@@ -36,6 +36,23 @@ export default () => {
 	const width = cardWidth * cardsWide
 
 	return svg`
-		<svg class="render-cards" width="${width}px" height="${height}px">${compassCards}</svg>
+		<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 ${width} ${height}"  class="render-cards" width="${width}px" height="${height}px">
+		<defs>
+			<style>
+				@font-face {
+					font-family: "Virgil";
+					src: url("https://excalidraw.com/Virgil.woff2");
+				}
+				@font-face {
+					font-family: "Cascadia";
+					src: url("https://excalidraw.com/Cascadia.woff2");
+				}
+				text {
+					font-family: "Virgil"
+				}
+			</style>
+		</defs>
+		${compassCards}
+	</svg>
 	`
 }
