@@ -78,10 +78,6 @@ const buildCompasses = () => {
 	// to filter for compasses that have the given triad
 	const forTriad = (triad) => (compass) => compassIncludesTriad(compass, triad)
 
-	// for filtering out candidate triads that already exist in compasses
-	const notInCompasses = (compasses) => (triad) =>
-		!compasses.some((compass) => compassIncludesTriad(compass, triad))
-
 	// for sorting triads based on their frequency in a Compass
 	const byTriadFrequency = (allCompasses) => (triadA, triadB) => {
 		// get the count of triads that have triad a or b
@@ -90,53 +86,56 @@ const buildCompasses = () => {
 		return countOfA - countOfB
 	}
 
+	// determine if triads have any similar letters
+	const hasNoMatchingLetters = (workingTriad) => (testLetters) => {
+		const joinedSet = new Set([...workingTriad, ...testLetters])
+		return joinedSet.size === workingTriad.length + testLetters.length
+	}
+
+	// determine if a triad has ever appeared in other compasses at this index
+	const notInCompassesAtIndex = (allCompasses, index) => (triad) => {
+		const someCompassHasTriadAtIndex = allCompasses.some(
+			(compass) => compass[index] === triad
+		)
+		return !someCompassHasTriadAtIndex
+	}
+
 	// now that we have all the triads, lets build all the compasses (which will be 4 triads with non-matching letters)
 	const buildCompass = (allCompasses, allTriads) => {
-		const workingNorth = allTriads.sort(byTriadFrequency(allCompasses))[0]
+		// filter out any triads that appear in the north before
+		const workingNorth = allTriads
+			.filter(notInCompassesAtIndex(allCompasses, 0))
+			.sort(byTriadFrequency(allCompasses))[0]
 
-		// get all compasses that have this triad
-		const compassesWithNorthTriad = allCompasses.filter(forTriad(workingNorth))
-		let remainingTriads = allTriads.filter((triad) => triad !== workingNorth)
-
-		// find a east candidate (should be the one we've used the least and never with the north)
-		const validEastTriads = remainingTriads.filter(
-			notInCompasses(compassesWithNorthTriad)
-		)
-		const workingEast = validEastTriads.sort(byTriadFrequency(allCompasses))[0]
+		// find a east candidate (no matching letters, not at this index, and the least used)
+		const workingEast = allTriads
+			.filter(hasNoMatchingLetters(workingNorth))
+			.filter(notInCompassesAtIndex(allCompasses, 1))
+			.sort(byTriadFrequency(allCompasses))[0]
 
 		// if we couldn't find a east, return an incomplete array (an error)
 		if (!workingEast) {
 			return [workingNorth]
 		}
 
-		// get all compasses that have this east triad
-		const compassesWithEastTriad = allCompasses.filter(forTriad(workingEast))
-		// get all remaining triads
-		remainingTriads = validEastTriads.filter((triad) => triad !== workingEast)
-
-		// find a south candidate (should be the one we've used the least and never with the north or east)
-		const validSouthTriads = remainingTriads.filter(
-			notInCompasses(compassesWithEastTriad)
-		)
-		const workingSouth = validSouthTriads.sort(
-			byTriadFrequency(allCompasses)
-		)[0]
+		// find a south candidate (no matching letters, not at this index, and the least used)
+		const workingSouth = allTriads
+			.filter(hasNoMatchingLetters([...workingNorth, ...workingEast]))
+			.filter(notInCompassesAtIndex(allCompasses, 2))
+			.sort(byTriadFrequency(allCompasses))[0]
 
 		// if we couldn't find a south, return an incomplete array (an error)
 		if (!workingSouth) {
 			return [workingNorth, workingEast]
 		}
 
-		// get all compasses that have this south triad
-		const compassesWithSouthTriad = allCompasses.filter(forTriad(workingSouth))
-		// get all remaining triads
-		remainingTriads = validSouthTriads.filter((triad) => triad !== workingSouth)
-
-		// find a west candidate (should be the one we've used the least and never with the north or east or south)
-		const validWestTriads = remainingTriads.filter(
-			notInCompasses(compassesWithSouthTriad)
-		)
-		const workingWest = validWestTriads.sort(byTriadFrequency(allCompasses))[0]
+		// find a west candidate(no matching letters, not at this index, and the least used)
+		const workingWest = allTriads
+			.filter(
+				hasNoMatchingLetters([...workingNorth, ...workingEast, ...workingSouth])
+			)
+			.filter(notInCompassesAtIndex(allCompasses, 3))
+			.sort(byTriadFrequency(allCompasses))[0]
 
 		// if we couldn't find a west, return an incomplete array (an error)
 		if (!workingWest) {
@@ -160,4 +159,5 @@ const buildCompasses = () => {
 	return allCompasses
 }
 
-console.log(JSON.stringify(buildCompasses()))
+const allCompasses = buildCompasses()
+console.log(JSON.stringify(allCompasses))

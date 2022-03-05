@@ -7,10 +7,10 @@ const svg = registerSvg({
 	CompassCard: CompassCard,
 })
 
-const cardWidth = 350
+const cardWidth = 345
 const cardHeight = 342
 
-const cardsWide = 10
+const cardsWide = Math.ceil(compasses.length / 7)
 const cardsHigh = 7
 
 export default () => {
@@ -29,8 +29,6 @@ export default () => {
 			x=${x * cardWidth} y=${y * cardHeight} />`
 		)
 	})
-
-	// there are 69 compasses
 
 	const height = cardHeight * cardsHigh
 	const width = cardWidth * cardsWide
