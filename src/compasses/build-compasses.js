@@ -160,4 +160,30 @@ const buildCompasses = () => {
 }
 
 const allCompasses = buildCompasses()
-console.log(JSON.stringify(allCompasses))
+
+// build json
+// console.log(JSON.stringify(allCompasses))
+
+// build csv
+const columns = [
+	'quantity',
+	'name',
+	'n1',
+	'n2',
+	'n3',
+	'e1',
+	'e2',
+	'e3',
+	's1',
+	's2',
+	's3',
+	'w1',
+	'w2',
+	'w3',
+]
+console.log(columns.join(','))
+console.log(
+	allCompasses
+		.map((compass, compassIndex) => [1, compassIndex + 1, ...compass].join(','))
+		.join('\n')
+)
