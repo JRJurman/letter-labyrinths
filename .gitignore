@@ -37,3 +37,6 @@ logs
 
 # dependencies
 node_modules
+
+# excalidraw png files
+*.png:Zone.Identifier
