@@ -39,4 +39,4 @@ logs
 node_modules
 
 # excalidraw png files
-*.png:Zone.Identifier
+*:Zone.Identifier
