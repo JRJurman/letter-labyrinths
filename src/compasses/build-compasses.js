@@ -1,8 +1,9 @@
 const buildCompasses = () => {
 	const letters = {
 		vowels: ['A', 'E', 'I', 'O', 'U'],
-		rares: ['J', 'Q', 'Z', 'K', 'W', 'Y', 'X', 'V'],
-		commons: ['S', 'F', 'G', 'R', 'N', 'D', 'H', 'M', 'B', 'C', 'T', 'L', 'P'],
+		// J, Q, V, X, Z have been ommitted
+		rares: ['K', 'W', 'V', 'T', 'G', 'F', 'H', 'B'],
+		commons: ['S', 'R', 'N', 'D', 'M', 'C', 'L', 'P'],
 	}
 
 	/* =================== TRIADS =================== */
