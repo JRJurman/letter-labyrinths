@@ -11,13 +11,14 @@ const HW = 500
 // then we place based on which element has the least weight
 const mapWeights = [
 	// the edges will have HWs and the corners / starter zones have MWs
+	// 01 for some noise in the map
 	[MW, HW, HW, HW, MW, MW, MW, MW, HW, HW, HW, MW],
-	[HW, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, HW],
-	[MW, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, MW],
-	[MW, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, MW],
-	[MW, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, MW],
-	[MW, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, MW],
-	[HW, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, HW],
+	[HW, 00, 01, 00, 01, 00, 01, 00, 00, 00, 01, HW],
+	[MW, 00, 00, 01, 00, 01, 00, 01, 00, 01, 00, MW],
+	[MW, 00, 01, 00, 01, 00, 00, 00, 01, 00, 01, MW],
+	[MW, 01, 00, 00, 00, 01, 00, 01, 00, 01, 00, MW],
+	[MW, 00, 01, 00, 01, 00, 01, 00, 01, 00, 01, MW],
+	[HW, 00, 00, 01, 00, 01, 00, 01, 00, 01, 00, HW],
 	[MW, HW, HW, HW, MW, MW, MW, MW, HW, HW, HW, MW],
 ].flat()
 
@@ -97,22 +98,39 @@ const printMap = (map) => {
 // main function to build all maps
 const buildMaps = () => {
 	const allMaps = []
-	// keep building maps until we get a value that is larger than 99
-	while (allMaps.length < 12) {
+	// we want 12 maps (we will actually toss the first one)
+	while (allMaps.length < 13) {
 		const nextMap = buildNewMap()
 		// 5 enemies, and 10 traps
 		const tokens = [
-			...new Array(5).fill(['E', 5]),
-			...new Array(5).fill(['T', 4]),
+			['E', 3],
+			['E', 3],
+			['E', 3],
+			['E', 3],
+			['E', 3],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
+			['T', 2],
 		]
 		tokens.forEach(([token, weight]) => {
-			const nextSortableIndex = getNextSortableIndexToAdd()
+			let nextSortableIndex
+			// keep trying to find a nextSortableIndex that isn't taken
+			do {
+				nextSortableIndex = getNextSortableIndexToAdd()
+				increaseWeightOnIndex(nextSortableIndex.index, weight)
+			} while (nextMap[nextSortableIndex.index] !== ' ')
 			nextMap[nextSortableIndex.index] = token
-			increaseWeightOnIndex(nextSortableIndex.index, weight)
 		})
 
-		// console.log('-'.repeat(mapWidth * 2))
-		// printMap(nextMap)
+		console.log('-'.repeat(mapWidth * 2))
+		printMap(nextMap)
 		allMaps.push(nextMap)
 	}
 	return allMaps
@@ -120,12 +138,34 @@ const buildMaps = () => {
 
 const allMaps = buildMaps()
 
+const getXYFromIndex = (index) => {
+	const x = index % mapWidth
+	const y = Math.floor(index / mapWidth)
+	return { x, y }
+}
+
+// TODO make the CSV have the front and back of the card
+
 const columns = [
 	'quantity',
 	'name',
-	...[...new Array(mapHeight * mapWidth)].map((_, index) => index),
-]
+	['E0X', 'E0Y', 'E1X', 'E1Y', 'E2X', 'E2Y', 'E3X', 'E3Y', 'E4X', 'E4Y'],
+	['T0X', 'T0Y', 'T1X', 'T1Y', 'T2X', 'T2Y', 'T3X', 'T3Y', 'T4X', 'T4Y'],
+	['T5X', 'T5Y', 'T6X', 'T6Y', 'T7X', 'T7Y', 'T8X', 'T8Y', 'T9X', 'T9Y'],
+].flat()
+
 console.log(columns.join(','))
 console.log(
-	allMaps.map((map, mapIndex) => [1, mapIndex + 1, ...map].join(',')).join('\n')
+	allMaps
+		.map((map, mapIndex) => {
+			// get all the tokens as XY objects
+			const tokens = map
+				.map((space, spaceIndex) => ({ ...getXYFromIndex(spaceIndex), space }))
+				.filter(({ space }) => space != ' ')
+				.reduce((tokensArray, nextToken) => {
+					return [...tokensArray, nextToken.x, nextToken.y]
+				}, [])
+			return [1, mapIndex + 1, ...tokens].join(',')
+		})
+		.join('\n')
 )
