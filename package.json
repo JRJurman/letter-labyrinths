@@ -1,36 +1,13 @@
 {
-	"name": "letter-labyrinths/",
+	"name": "letter-labyrinths",
 	"version": "1.0.0",
+	"private": "true",
 	"scripts": {
-		"start": "parcel index.html --open",
-		"build": "parcel build index.html",
-		"test": "jest --watch",
-		"build:compasses": "node src/compasses/build-compasses.js > src/compasses/all-compasses.csv",
+		"build:compasses": "node compasses/build-compasses.js > compasses/all-compasses.csv",
 		"build:compasses:png": "svgexport assets/compasses.svg assets/compasses.png"
 	},
 	"dependencies": {
-		"@babel/core": "^7.12.16",
-		"@testing-library/dom": "^7.29.4",
-		"@testing-library/jest-dom": "^5.11.9",
-		"core-js": "^3.8.3",
-		"eslint-config-tram-one": "^4.0.0",
-		"jest": "^26.6.3",
-		"jest-environment-jsdom-fourteen": "^1.0.1",
-		"jest-transform-css": "^2.1.0",
-		"parcel-bundler": "^1.12.4",
-		"parcel-plugin-nuke-dist": "^1.0.1",
-		"regenerator-runtime": "^0.13.7",
 		"sass": "^1.32.7",
-		"svgexport": "^0.4.2",
-		"tram-blueprints": "^1.1.0",
-		"tram-one": "^10.1.0"
-	},
-	"keywords": [
-		"tram-one"
-	],
-	"babel": {
-		"presets": [
-			"@babel/preset-env"
-		]
+		"svgexport": "^0.4.2"
 	}
 }
